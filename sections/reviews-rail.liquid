@@ -1,0 +1,126 @@
+{{ 'purelane-base.css' | asset_url | stylesheet_tag }}
+{{ 'purelane-reviews.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane-base.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign review_blocks = section.blocks | where: 'type', 'review'
+-%}
+
+<section
+  class="pl-scope pl-section"
+  id="voices-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="reviews-rail"
+  style="{% render 'purelane-scene', depth: section.settings.scene_depth %}"
+>
+  <div class="pl-wrap">
+    <h2 class="visually-hidden">Customer reviews</h2>
+    <div class="pl-revhead pl-rv">
+      {%- if section.settings.kicker != blank -%}<span class="pl-kicker">{{ section.settings.kicker }}</span>{%- endif -%}
+      {%- if section.settings.average_rating != blank -%}
+        <span class="pl-agg">
+          <span class="pl-stars" aria-hidden="true">
+            {%- for i in (1..5) -%}{% render 'purelane-icon', name: 'star' %}{%- endfor -%}
+          </span>
+          <b>{{ section.settings.average_rating }}</b> from {{ section.settings.review_count }}
+        </span>
+      {%- endif -%}
+      {%- if section.settings.homes_count != blank -%}
+        <span class="pl-agg">Loved by <b>{{ section.settings.homes_count }}</b> homes</span>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if review_blocks.size > 0 -%}
+    <div class="pl-revrail pl-rv" aria-label="Customer reviews" tabindex="0">
+      <div class="pl-revtrack">
+        {%- for block in review_blocks -%}
+          {% render 'purelane-review-card', block: block, duplicate: false %}
+        {%- endfor -%}
+        {%- comment -%} duplicate set enables the seamless -50% loop without JS {%- endcomment -%}
+        {%- for block in review_blocks -%}
+          {% render 'purelane-review-card', block: block, duplicate: true %}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Reviews rail",
+  "tag": "section",
+  "class": "shopify-section--reviews-rail",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Eyebrow text", "default": "That's what they said" },
+    { "type": "text", "id": "average_rating", "label": "Average rating", "default": "4.8" },
+    { "type": "text", "id": "review_count", "label": "Review count text", "default": "8,000+ reviews" },
+    { "type": "text", "id": "homes_count", "label": "Homes count", "default": "12 lakh+" },
+    {
+      "type": "select",
+      "id": "scene_depth",
+      "label": "Background mood",
+      "options": [
+        { "value": "1", "label": "Bright — near the top" },
+        { "value": "2", "label": "Mid-light" },
+        { "value": "3", "label": "Mid-deep (default)" },
+        { "value": "4", "label": "Deep — near the footer" }
+      ],
+      "default": "1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Rating", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "title", "label": "Title", "default": "Works like a charm" },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "Finally an eco option that cleans as well as the chemical detergent I used for years, and it smells better."
+        },
+        { "type": "text", "id": "author", "label": "Author", "default": "Anita" },
+        { "type": "text", "id": "category", "label": "Product / category", "default": "Laundry detergent" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews rail",
+      "blocks": [
+        { "type": "review" },
+        {
+          "type": "review",
+          "settings": {
+            "title": "Best dishwash ever",
+            "quote": "Our old dishwash left my help with dry, cracked skin. That stopped completely after we switched.",
+            "author": "Priya",
+            "category": "Dishwash gel"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "title": "Great product, great packaging",
+            "quote": "Very soft on hands with a lovely fragrance, and it feels good to be using far less plastic.",
+            "author": "Sunita",
+            "category": "Liquid handwash"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "title": "Dog friendly",
+            "quote": "We switched because chemical floor cleaners were setting off my dog's allergies. No reactions since.",
+            "author": "Rohit S.",
+            "category": "Floor cleaner"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,163 @@
+{{ 'purelane-base.css' | asset_url | stylesheet_tag }}
+{{ 'purelane-bundles.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane-base.js' | asset_url }}" defer></script>
+
+
+{%- liquid
+  assign tier_blocks = section.blocks | where: 'type', 'tier'
+-%}
+
+<section
+  class="pl-scope pl-section"
+  id="bundles-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="bundles"
+  style="{% render 'purelane-scene', depth: section.settings.scene_depth %}"
+>
+  <div class="pl-wrap">
+    <div class="pl-glass pl-rv" style="padding:clamp(26px,3.4vw,40px);margin-bottom:16px">
+      <div class="pl-panel-head pl-center">
+        {%- if section.settings.kicker != blank -%}<span class="pl-kicker">{{ section.settings.kicker }}</span>{%- endif -%}
+        <h2 class="pl-d2" style="margin-top:12px">{{ section.settings.heading }}</h2>
+        {%- if section.settings.subheading != blank -%}<p class="pl-lede" style="margin:0 auto">{{ section.settings.subheading }}</p>{%- endif -%}
+      </div>
+    </div>
+
+    {%- if tier_blocks.size > 0 -%}
+      <div class="pl-tiers">
+        {%- for block in tier_blocks -%}
+          {%- liquid
+            assign product = block.settings.tier_product
+            assign display_products = block.settings.display_products
+            assign features = block.settings.features | split: "\n"
+            assign featured_class = ''
+            if block.settings.featured
+              assign featured_class = ' pl-tier--featured'
+            endif
+            assign pix_class = ''
+            if display_products.size >= 4
+              assign pix_class = ' pl-tierpix--five'
+            endif
+            assign btn_class = 'pl-btn-ghost'
+            if block.settings.featured
+              assign btn_class = 'pl-btn-primary'
+            endif
+            assign delay = forloop.index0
+          -%}
+          <article class="pl-glass pl-tier{{ featured_class }} pl-rv pl-rv-d{{ delay }}" {{ block.shopify_attributes }}>
+            {%- if block.settings.tag_label != blank -%}<span class="pl-tag">{{ block.settings.tag_label }}</span>{%- endif -%}
+            {%- if display_products.size > 0 -%}
+              <div class="pl-tierpix{{ pix_class }}" aria-hidden="true">
+                {%- for item in display_products -%}
+                  {%- if item.featured_image -%}
+                    {{ item.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: item.title }}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+            <div class="pl-qty">{{ block.settings.quantity }}<small>Products</small></div>
+            {% render 'purelane-price', product: product, class: 'pl-price', show_badge: false %}
+            {%- if product.compare_at_price > 0 and block.settings.quantity > 0 -%}
+              {%- assign per_unit = product.price | divided_by: block.settings.quantity -%}
+              <p class="pl-perunit">Flat {{ per_unit | money_without_trailing_zeros }} per product</p>
+            {%- endif -%}
+            {%- if features.size > 0 -%}
+              <ul>
+                {%- for feature in features -%}
+                  {%- if feature != blank -%}
+                    <li>{% render 'purelane-icon', name: 'check' %}{{ feature }}</li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+            <a class="pl-btn {{ btn_class }} pl-btn-block" href="{{ block.settings.cta_link | default: product.url | default: '#' }}">
+              {{ block.settings.cta_label | default: 'Build this box' }}
+              {%- if block.settings.featured %} {% render 'purelane-icon', name: 'arrow' %}{% endif -%}
+            </a>
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bundles",
+  "tag": "section",
+  "class": "shopify-section--bundles",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Eyebrow text", "default": "Build your bundle" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "One box. Every room." },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Supporting text",
+      "default": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way."
+    },
+    {
+      "type": "select",
+      "id": "scene_depth",
+      "label": "Background mood",
+      "options": [
+        { "value": "1", "label": "Bright — near the top" },
+        { "value": "2", "label": "Mid-light" },
+        { "value": "3", "label": "Mid-deep (default)" },
+        { "value": "4", "label": "Deep — near the footer" }
+      ],
+      "default": "3"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Bundle tier",
+      "limit": 3,
+      "settings": [
+        { "type": "text", "id": "tag_label", "label": "Tag label", "default": "Most popular" },
+        {
+          "type": "range",
+          "id": "quantity",
+          "label": "Products in this tier",
+          "min": 2,
+          "max": 6,
+          "step": 1,
+          "default": 3
+        },
+        {
+          "type": "product",
+          "id": "tier_product",
+          "label": "Tier product",
+          "info": "The real, purchasable bundle product — supplies price, compare-at price and checkout URL."
+        },
+        {
+          "type": "product_list",
+          "id": "display_products",
+          "label": "Pictured products",
+          "limit": 5
+        },
+        { "type": "checkbox", "id": "featured", "label": "Feature this tier", "default": false },
+        {
+          "type": "textarea",
+          "id": "features",
+          "label": "Feature bullets",
+          "info": "One per line.",
+          "default": "Pick any three products\nCovers kitchen and laundry\nFree shipping across India"
+        },
+        { "type": "text", "id": "cta_label", "label": "Button label", "default": "Build this box" },
+        { "type": "url", "id": "cta_link", "label": "Button link", "info": "Leave blank to link to the tier product." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundles",
+      "blocks": [
+        { "type": "tier", "settings": { "tag_label": "Starter", "quantity": 2 } },
+        { "type": "tier", "settings": { "tag_label": "Most popular", "quantity": 3, "featured": true } },
+        { "type": "tier", "settings": { "tag_label": "Whole home", "quantity": 5 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,109 @@
+root{
+  --pl-ink:#17102b;
+  --pl-deep:#241a3d;
+  --pl-brand:#4b3a8f;
+  --pl-brand-lt:#6b55b8;
+  --pl-paper:#ece6f7;
+  --pl-paper-2:rgba(236,230,247,.74);
+  --pl-paper-3:rgba(236,230,247,.52);
+  --pl-accent:#f0a03c;
+  --pl-accent-2:#c9761d;
+  --pl-surface:#faf7fd;
+  --pl-g-line:rgba(236,230,247,.22);
+  --pl-g-shadow:0 26px 74px rgba(18,12,34,.44);
+  --pl-g-inset:inset 0 1px 0 rgba(255,255,255,.24);
+  --pl-r:26px;
+  --pl-r-sm:16px;
+  --pl-maxw:1180px;
+  --pl-sec-y:34px;
+  --pl-ease:cubic-bezier(.2,.7,.2,1);
+}
+@media(max-width:760px){:root{--pl-sec-y:22px}}
+
+.pl-scope *{box-sizing:border-box}
+.pl-scope img,.pl-scope svg{display:block;max-width:100%}
+.pl-scope a{color:inherit;text-decoration:none}
+.pl-scope button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.pl-scope :focus-visible{outline:2px solid var(--pl-accent);outline-offset:3px;border-radius:6px}
+
+/* ---------- TYPE ---------- */
+.pl-scope{font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.62;-webkit-font-smoothing:antialiased}
+.pl-d1,.pl-d2,.pl-d3,.pl-d4{font-family:'Outfit',system-ui,sans-serif;text-transform:uppercase;letter-spacing:-.018em;font-weight:800;line-height:.87;color:var(--pl-surface);margin:0}
+.pl-d1{font-size:clamp(48px,8.6vw,112px)}
+.pl-d2{font-size:clamp(30px,4.6vw,54px);line-height:.94}
+.pl-d3{font-size:clamp(21px,2.5vw,30px);line-height:1.04;font-weight:700;letter-spacing:-.01em}
+.pl-lime{color:var(--pl-accent)}
+.pl-lede{font-size:clamp(15px,1.35vw,17.5px);color:var(--pl-paper-2);max-width:44ch;margin:0}
+.pl-kicker{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--pl-paper-3)}
+.pl-wrap{max-width:var(--pl-maxw);margin:0 auto;padding:0 18px}
+.pl-panel-head{max-width:640px}
+.pl-panel-head.pl-center{margin-left:auto;margin-right:auto;text-align:center}
+.pl-rule{display:flex;align-items:center;gap:13px;margin:12px 0 0;max-width:270px}
+.pl-panel-head.pl-center .pl-rule{margin-left:auto;margin-right:auto}
+.pl-rule i{height:1px;flex:1;background:linear-gradient(90deg,rgba(236,230,247,.44),transparent)}
+.pl-rule svg{width:16px;height:16px;color:var(--pl-accent);flex:0 0 auto}
+
+/* ---------- SECTION SURFACE (self-contained backdrop, replaces the
+   prototype's whole-page scroll-linked scene crossfade so each section
+   still looks correct in isolation, in any order, in the Theme Editor) --- */
+.pl-section{position:relative;padding:var(--pl-sec-y) 0;color:var(--pl-paper);background:var(--pl-scene,linear-gradient(178deg,#067c71 0%,#00625d 30%,#014e4a 64%,#023c39 100%))}
+.pl-section::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(126% 86% at 50% 28%,transparent 38%,rgba(1,50,46,.20) 78%,rgba(1,34,32,.44) 100%)}
+.pl-section > .pl-wrap{position:relative;z-index:1}
+
+/* ---------- GLASS ---------- */
+.pl-glass{
+  background:linear-gradient(158deg,rgba(236,230,247,.15),rgba(75,58,143,.20) 58%,rgba(23,16,43,.28));
+  backdrop-filter:blur(24px) saturate(150%);
+  -webkit-backdrop-filter:blur(24px) saturate(150%);
+  border:1px solid var(--pl-g-line);
+  border-radius:var(--pl-r);
+  box-shadow:var(--pl-g-shadow),var(--pl-g-inset);
+  position:relative;overflow:hidden;
+}
+.pl-glass::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(115deg,rgba(255,255,255,.16),transparent 30%,transparent 72%,rgba(240,160,60,.07))}
+.pl-glass-2{
+  background:linear-gradient(158deg,rgba(236,230,247,.10),rgba(0,48,46,.22));
+  backdrop-filter:blur(18px) saturate(135%);
+  -webkit-backdrop-filter:blur(18px) saturate(135%);
+  border:1px solid rgba(236,230,247,.16);
+  border-radius:var(--pl-r);
+  box-shadow:0 18px 48px rgba(18,12,34,.36),inset 0 1px 0 rgba(255,255,255,.16);
+  position:relative;overflow:hidden;
+}
+@media(max-width:760px){
+  .pl-glass{backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%)}
+  .pl-glass-2{backdrop-filter:blur(12px) saturate(130%);-webkit-backdrop-filter:blur(12px) saturate(130%)}
+}
+
+/* ---------- BUTTONS ---------- */
+.pl-btn{display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 22px;border-radius:999px;
+  font-size:12.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;transition:.35s var(--pl-ease);white-space:nowrap;cursor:pointer}
+.pl-btn svg{width:15px;height:15px;flex:0 0 auto}
+.pl-btn-primary{background:linear-gradient(135deg,var(--pl-accent-2),#5d8d1c);color:#08211a;box-shadow:0 12px 30px rgba(201,118,29,.34),inset 0 1px 0 rgba(255,255,255,.34)}
+.pl-btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(201,118,29,.44),inset 0 1px 0 rgba(255,255,255,.4)}
+.pl-btn-ghost{background:rgba(236,230,247,.10);border:1px solid rgba(236,230,247,.30);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--pl-surface)}
+.pl-btn-ghost:hover{background:rgba(236,230,247,.18);transform:translateY(-2px)}
+.pl-btn-sm{height:38px;padding:0 18px;font-size:11px;letter-spacing:.14em}
+.pl-btn-block{width:100%;justify-content:center}
+
+/* ---------- REVEAL ON SCROLL ---------- */
+.pl-rv{opacity:0;transform:translateY(30px);filter:blur(7px);transition:opacity .95s var(--pl-ease),transform .95s var(--pl-ease),filter .95s var(--pl-ease)}
+.pl-rv.pl-in{opacity:1;transform:none;filter:none}
+.pl-rv-d1{transition-delay:.09s}.pl-rv-d2{transition-delay:.18s}.pl-rv-d3{transition-delay:.27s}.pl-rv-d4{transition-delay:.36s}
+
+@media(prefers-reduced-motion:reduce){
+  .pl-scope *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  .pl-rv{opacity:1;transform:none;filter:none}
+}
+
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---------- horizontal scroll rail (combos / reviews) ---------- */
+.pl-rail-scroll{scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.pl-rail-scroll::-webkit-scrollbar{display:none}
+.pl-swipecue{display:flex;align-items:center;justify-content:center;gap:8px;font-size:10px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--pl-paper-3);margin-top:2px}
+.pl-swipecue svg{width:14px;height:14px;color:var(--pl-accent)}
+@media(min-width:860px){.pl-swipecue{display:none}}

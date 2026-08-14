@@ -1,0 +1,16 @@
+{%- comment -%}
+  Purelane background scene.
+  Light teal version — keeps the scene variable architecture intact
+  so existing sections continue to work without changing their CSS.
+{%- endcomment -%}
+
+{%- case depth -%}
+  {%- when '1' -%}
+    --pl-scene:#e3f7f2;
+  {%- when '2' -%}
+    --pl-scene:#e3f7f2;
+  {%- when '4' -%}
+    --pl-scene:#e3f7f2;
+  {%- else -%}
+    --pl-scene:#e3f7f2;
+{%- endcase -%}

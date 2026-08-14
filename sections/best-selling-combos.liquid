@@ -1,0 +1,153 @@
+{{ 'purelane-base.css' | asset_url | stylesheet_tag }}
+{{ 'purelane-combos.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane-base.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign combo_blocks = section.blocks | where: 'type', 'combo'
+-%}
+
+<section
+  class="pl-scope pl-section"
+  id="combos-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="best-selling-combos"
+  style="{% render 'purelane-scene', depth: section.settings.scene_depth %}"
+>
+  <div class="pl-wrap">
+    <div class="pl-panel-head pl-center pl-rv">
+      {%- if section.settings.kicker != blank -%}<span class="pl-kicker">{{ section.settings.kicker }}</span>{%- endif -%}
+      <h2 class="pl-d2" style="margin-top:12px">{{ section.settings.heading }}</h2>
+      <div class="pl-rule"><i></i>{% render 'purelane-icon', name: 'leaf' %}<i></i></div>
+      {%- if section.settings.subheading != blank -%}
+        <p class="pl-lede" style="margin:14px auto 0">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if combo_blocks.size > 0 -%}
+      <div class="pl-comborail pl-rail-scroll pl-rv" role="list" aria-label="Combo boxes">
+        {%- for block in combo_blocks -%}
+          {%- liquid
+            assign bundle = block.settings.bundle_product
+            assign components = block.settings.components
+            assign captions = block.settings.component_captions | split: "\n"
+            assign featured_class = ''
+            if block.settings.featured
+              assign featured_class = ' pl-combo--featured'
+            endif
+            assign btn_class = 'pl-btn-ghost'
+            if block.settings.featured
+              assign btn_class = 'pl-btn-primary'
+            endif
+          -%}
+          <article class="pl-glass pl-combo{{ featured_class }}" role="listitem" {{ block.shopify_attributes }}>
+            <div class="pl-tray">
+              {%- if bundle != blank and bundle.compare_at_price > bundle.price -%}
+                {%- assign saved = bundle.compare_at_price | minus: bundle.price -%}
+                <span class="pl-save">You save {{ saved | money_without_trailing_zeros }}</span>
+              {%- endif -%}
+              {%- if block.settings.flag_label != blank -%}<span class="pl-flag">{{ block.settings.flag_label }}</span>{%- endif -%}
+              <div class="pl-stack">
+                {%- for item in components limit: 3 -%}
+                  <span class="pl-it">
+                    {%- if item.featured_image -%}
+                      {{ item.featured_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: item.title }}
+                    {%- else -%}
+                      <span class="pl-tile">{% render 'purelane-icon', name: 'leaf' %}</span>
+                    {%- endif -%}
+                    <span>{{ captions[forloop.index0] | default: item.title }}</span>
+                  </span>
+                  {%- unless forloop.last -%}<span class="pl-plus" aria-hidden="true">+</span>{%- endunless -%}
+                {%- endfor -%}
+              </div>
+            </div>
+            <div class="pl-body">
+              <h3>{{ bundle.title | default: block.settings.fallback_title }}</h3>
+              <div class="pl-cnt">{{ components.size }} products</div>
+              {%- if block.settings.description != blank -%}<p class="pl-inc">{{ block.settings.description }}</p>{%- endif -%}
+              {% render 'purelane-price', product: bundle, class: 'pl-prow' %}
+              {%- if section.settings.fine_print != blank -%}<div class="pl-fine">{{ section.settings.fine_print }}</div>{%- endif -%}
+              <a class="pl-btn {{ btn_class }} pl-btn-block" href="{{ bundle.url | default: '#' }}">
+                Shop bundle {% render 'purelane-icon', name: 'arrow' %}
+              </a>
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+      <div class="pl-swipecue" aria-hidden="true">{% render 'purelane-icon', name: 'arrow' %}Swipe for more combos</div>
+      {%- if section.settings.rail_note != blank -%}<p class="pl-railnote">{{ section.settings.rail_note }}</p>{%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Best-selling combos",
+  "tag": "section",
+  "class": "shopify-section--combos",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Eyebrow text", "default": "Pre-built to save you money" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Best selling combos" },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Supporting text",
+      "default": "Swipe through the boxes people order most. Each one is already priced below buying the same products on their own."
+    },
+    { "type": "text", "id": "fine_print", "label": "Fine print (shown on every combo)", "default": "Inclusive of all taxes · COD available" },
+    { "type": "text", "id": "rail_note", "label": "Note below the rail", "default": "Tapping \"Shop bundle\" opens the bundle picker with these products already added. You can still swap anything before you pay." },
+    {
+      "type": "select",
+      "id": "scene_depth",
+      "label": "Background mood",
+      "options": [
+        { "value": "1", "label": "Bright — near the top" },
+        { "value": "2", "label": "Mid-light" },
+        { "value": "3", "label": "Mid-deep (default)" },
+        { "value": "4", "label": "Deep — near the footer" }
+      ],
+      "default": "3"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "combo",
+      "name": "Combo box",
+      "settings": [
+        {
+          "type": "product",
+          "id": "bundle_product",
+          "label": "Bundle product",
+          "info": "The real, purchasable product for this combo — supplies its title, price, compare-at price and URL."
+        },
+        { "type": "text", "id": "fallback_title", "label": "Fallback title", "info": "Used only if no bundle product is selected." },
+        { "type": "text", "id": "flag_label", "label": "Flag label", "info": "E.g. \"Most popular\". Leave blank to hide.", "placeholder": "Most popular" },
+        { "type": "checkbox", "id": "featured", "label": "Feature this combo (highlighted border + solid button)", "default": false },
+        {
+          "type": "product_list",
+          "id": "components",
+          "label": "Included products",
+          "limit": 3,
+          "info": "Shown as the stacked product illustration."
+        },
+        {
+          "type": "textarea",
+          "id": "component_captions",
+          "label": "Included-product captions",
+          "info": "One line per included product, in the same order, e.g. \"Cuts grease instantly\". Falls back to the product title."
+        },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Best-selling combos",
+      "blocks": [
+        { "type": "combo" },
+        { "type": "combo" },
+        { "type": "combo", "settings": { "featured": true } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,17 @@
+/* ---------- HEADER MARQUEE / TICKER ---------- */
+.pl-ticker{position:relative;z-index:40;overflow:hidden;white-space:nowrap;
+  font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  background:rgba(23,16,43,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(236,230,247,.10);color:var(--pl-paper-2)}
+.pl-ticker--light{background:rgba(250,247,253,.86);border-bottom:1px solid rgba(75,58,143,.12);color:var(--pl-brand)}
+.pl-ticker--light .pl-tick-item b{color:#4f7d10}
+
+.pl-ticker-track{display:inline-flex;gap:40px;padding:9px 20px;
+  animation:pl-tick var(--pl-tick-duration,30s) linear infinite}
+.pl-tick-item b{color:var(--pl-accent);font-weight:700}
+@keyframes pl-tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+@media(max-width:760px){
+  .pl-ticker{font-size:10.5px}
+  .pl-ticker-track{gap:28px;padding:8px 16px}
+}

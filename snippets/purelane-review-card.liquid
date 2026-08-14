@@ -1,0 +1,24 @@
+{%- comment -%}
+  Usage: {% render 'purelane-review-card', block: block, duplicate: false %}
+  duplicate: true marks the card aria-hidden (used for the second, looping
+  copy of the marquee track so screen readers only hear each review once).
+  shopify_attributes is only emitted on the non-duplicate copy — Theme
+  Editor block selection keys off a single data-shopify-editor-block per
+  block id, so stamping it on both copies would make "select block"
+  ambiguous between the visible and the aria-hidden loop card.
+{%- endcomment -%}
+<article class="pl-glass-2 pl-rcard" {% if duplicate %}aria-hidden="true"{% else %}{{ block.shopify_attributes }}{% endif %}>
+  <div class="pl-stars" aria-hidden="true">
+    {%- for i in (1..5) -%}
+      {%- if i <= block.settings.rating -%}{% render 'purelane-icon', name: 'star' %}{%- endif -%}
+    {%- endfor -%}
+  </div>
+  <span class="visually-hidden">Rated {{ block.settings.rating }} out of 5</span>
+  <h5>{{ block.settings.title }}</h5>
+  <p>{{ block.settings.quote }}</p>
+  <div class="pl-who">
+    {% render 'purelane-icon', name: 'check' %}
+    <b>{{ block.settings.author }}</b>
+    {%- if block.settings.category != blank -%}<span>&middot; {{ block.settings.category }}</span>{%- endif -%}
+  </div>
+</article>

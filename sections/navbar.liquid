@@ -1,0 +1,117 @@
+{{ 'purelane-base.css' | asset_url | stylesheet_tag }}
+{{ 'purelane-navbar.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane-base.js' | asset_url }}" defer></script>
+<script src="{{ 'purelane-navbar.js' | asset_url }}" defer></script>
+{%- liquid
+  assign link_blocks = section.blocks | where: 'type', 'nav_link'
+  assign account_url = routes.login_url
+  if customer
+    assign account_url = routes.account_url
+  endif
+-%}
+
+<div class="pl-scope" data-section-id="{{ section.id }}" data-section-type="navbar">
+  <header class="pl-header" data-pl-header>
+    <div class="pl-navpill pl-glass">
+      <a class="pl-brand" href="{{ routes.root_url }}" aria-label="{{ section.settings.brand_name | default: shop.name }} home">
+        <span class="pl-mark">
+          {%- if section.settings.logo -%}
+            {{ section.settings.logo | image_url: width: 80 | image_tag: alt: section.settings.brand_name, loading: 'lazy' }}
+          {%- else -%}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3 20.5 8v8L12 21 3.5 16V8L12 3Z"/>
+              <path d="M12 12 20.5 8M12 12v9M12 12 3.5 8"/>
+            </svg>
+          {%- endif -%}
+        </span>
+        <span class="pl-txt">
+          <span class="pl-n1">{{ section.settings.brand_name | default: shop.name }}</span>
+          {%- if section.settings.brand_tagline != blank -%}<span class="pl-n2">{{ section.settings.brand_tagline }}</span>{%- endif -%}
+        </span>
+      </a>
+
+      {%- if link_blocks.size > 0 -%}
+        <nav class="pl-nav" aria-label="Main">
+          {%- for block in link_blocks -%}
+            <a href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+          {%- endfor -%}
+        </nav>
+      {%- endif -%}
+
+      <div class="pl-navtools">
+        {%- if section.settings.show_search -%}
+          <a class="pl-ico pl-hide-s" href="{{ routes.search_url }}" aria-label="Search">
+            {% render 'purelane-icon', name: 'search' %}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.show_account -%}
+          <a class="pl-ico pl-hide-s" href="{{ account_url }}" aria-label="{% if customer %}Account{% else %}Log in{% endif %}">
+            {% render 'purelane-icon', name: 'account' %}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.show_cart -%}
+          <a class="pl-ico" href="{{ routes.cart_url }}" aria-label="Cart, {{ cart.item_count }} item{{ cart.item_count | pluralize: '', 's' }}">
+            {% render 'purelane-icon', name: 'cart' %}
+            <span class="pl-cartdot" aria-hidden="true">{{ cart.item_count }}</span>
+          </a>
+        {%- endif -%}
+        {%- if link_blocks.size > 0 -%}
+          <button type="button" class="pl-ico pl-burger" data-pl-burger aria-label="Menu" aria-expanded="false" aria-controls="pl-mmenu-{{ section.id }}">
+            {% render 'purelane-icon', name: 'menu' %}
+          </button>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if link_blocks.size > 0 -%}
+      <nav class="pl-mmenu pl-glass" id="pl-mmenu-{{ section.id }}" data-pl-mmenu aria-label="Mobile">
+        {%- for block in link_blocks -%}
+          <a href="{{ block.settings.link | default: '#' }}">{{ block.settings.label }}</a>
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+  </header>
+</div>
+
+{% schema %}
+{
+  "name": "Navbar",
+  "tag": "div",
+  "class": "shopify-section--navbar",
+  "settings": [
+    { "type": "text", "id": "brand_name", "label": "Brand name", "default": "Purelane" },
+    { "type": "text", "id": "brand_tagline", "label": "Tagline", "default": "Clean, simply" },
+    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Leave blank to use the default mark icon." },
+    { "type": "checkbox", "id": "show_search", "label": "Show search icon", "default": true },
+    { "type": "checkbox", "id": "show_account", "label": "Show account icon", "default": true },
+    { "type": "checkbox", "id": "show_cart", "label": "Show cart icon", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "nav_link",
+      "name": "Menu link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Home" },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Use an on-page anchor like #shop to jump straight to a section (matches that section's \"Anchor ID\" setting), or any normal page/product/collection link."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Navbar",
+      "blocks": [
+        { "type": "nav_link", "settings": { "label": "Home", "link": "#top" } },
+        { "type": "nav_link", "settings": { "label": "Shop", "link": "#shop" } },
+        { "type": "nav_link", "settings": { "label": "Combos", "link": "#combos" } },
+        { "type": "nav_link", "settings": { "label": "Bundles", "link": "#bundles" } },
+        { "type": "nav_link", "settings": { "label": "Reviews", "link": "#reviews" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

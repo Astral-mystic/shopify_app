@@ -1,0 +1,30 @@
+/* ---------- BUNDLES ---------- */
+.pl-tiers{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:760px){.pl-tiers{grid-template-columns:repeat(3,1fr)}}
+.pl-tier{padding:24px 22px;transition:.4s var(--pl-ease)}
+.pl-tier:hover{transform:translateY(-5px)}
+.pl-tier.pl-tier--featured{border-color:rgba(240,160,60,.44);box-shadow:0 26px 74px rgba(18,12,34,.44),0 0 0 1px rgba(240,160,60,.2),var(--pl-g-inset)}
+.pl-tier .pl-tag{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;padding:5px 11px;border-radius:999px;margin-bottom:14px;
+  background:rgba(240,160,60,.18);border:1px solid rgba(240,160,60,.34);color:var(--pl-accent)}
+
+.pl-tierpix{display:flex;align-items:flex-end;justify-content:center;gap:2px;height:78px;margin:-4px 0 16px;
+  padding:8px 6px;border-radius:14px;background:linear-gradient(162deg,rgba(236,230,247,.10),rgba(75,58,143,.12));
+  border:1px solid rgba(236,230,247,.12)}
+.pl-tierpix img{height:62px;object-fit:contain;filter:drop-shadow(0 8px 12px rgba(1,24,22,.5))}
+.pl-tierpix--five img{height:54px}
+
+.pl-tier .pl-qty{font-family:'Outfit',sans-serif;font-weight:800;font-size:52px;line-height:.9;color:var(--pl-surface);letter-spacing:-.03em}
+.pl-tier .pl-qty small{font-size:14px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--pl-paper-3);display:block;margin-top:6px}
+.pl-tier .pl-price{font-family:'Outfit',sans-serif;font-weight:700;font-size:27px;color:var(--pl-accent);margin:16px 0 4px}
+.pl-tier .pl-price s{font-size:14px;color:var(--pl-paper-3);font-weight:500;margin-left:8px}
+.pl-tier .pl-perunit{font-size:12px;color:var(--pl-paper-2)}
+.pl-tier ul{list-style:none;margin:16px 0 20px;padding:0;display:grid;gap:8px}
+.pl-tier li{display:flex;gap:9px;font-size:13px;color:var(--pl-paper-2)}
+.pl-tier li svg{width:14px;height:14px;color:var(--pl-accent);flex:0 0 auto;margin-top:4px}
+
+@media(max-width:760px){
+  .pl-tierpix{height:70px}
+  .pl-tierpix img{height:54px}
+  .pl-tierpix--five img{height:46px}
+  .pl-tier .pl-qty{font-size:44px}
+}

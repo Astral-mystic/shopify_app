@@ -1,0 +1,62 @@
+{%- comment -%}
+  Purelane product card — reused by sections/product-grid.liquid (and any
+  future section that needs the same glass product tile).
+  Usage: {% render 'product-card', product: product, reveal_delay: 1 %}
+  Accepts:
+    product        - Shopify product object (required)
+    reveal_delay   - 0-4, staggers the scroll-reveal animation (optional)
+    image_sizes    - sizes attr for responsive image (optional)
+{%- endcomment -%}
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign delay_class = ''
+  if reveal_delay > 0
+    assign delay_class = 'pl-rv-d' | append: reveal_delay
+  endif
+
+  assign badge_text = ''
+  if product.tags contains 'best-seller'
+    assign badge_text = 'Best seller'
+  elsif product.tags contains 'new'
+    assign badge_text = 'New'
+  elsif product.tags contains 'top-rated'
+    assign badge_text = 'Top rated'
+  endif
+
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value
+-%}
+<article class="pl-glass pl-card pl-rv {{ delay_class }}">
+  <a class="pl-card-shot" href="{{ product.url }}" aria-hidden="true" tabindex="-1">
+    {%- if badge_text != '' -%}<span class="pl-pill">{{ badge_text }}</span>{%- endif -%}
+    {%- if product.featured_image -%}
+      {{ product.featured_image | image_url: width: 400 | image_tag:
+        loading: 'lazy',
+        widths: '200,300,400,600',
+        sizes: image_sizes | default: '(min-width: 860px) 220px, 45vw',
+        alt: product.featured_image.alt | default: product.title,
+        class: 'pl-card-img'
+      }}
+    {%- else -%}
+      <div class="pl-card-img pl-card-img--placeholder" role="img" aria-label="{{ product.title }}"></div>
+    {%- endif -%}
+  </a>
+  <h4><a href="{{ product.url }}">{{ product.title }}</a></h4>
+  {%- if rating -%}
+    <div class="pl-card-rate">
+      <b>{% render 'purelane-icon', name: 'star', class: 'pl-rate-star' %} {{ rating }}</b>
+      {%- if rating_count -%}<span>&middot; {{ rating_count }} reviews</span>{%- endif -%}
+    </div>
+  {%- endif -%}
+  {% render 'purelane-price', product: product, class: 'pl-card-pr' %}
+  <product-form-quick>
+    {%- form 'product', product, class: 'pl-card-form' -%}
+      <input type="hidden" name="id" value="{{ variant.id }}">
+      <button type="submit" class="pl-btn pl-btn-ghost pl-btn-sm pl-btn-block"
+        {% unless variant.available %}disabled{% endunless %}
+        aria-label="Add {{ product.title }} to cart">
+        {%- if variant.available -%}Add to cart{%- else -%}Sold out{%- endif -%}
+      </button>
+    {%- endform -%}
+  </product-form-quick>
+</article>

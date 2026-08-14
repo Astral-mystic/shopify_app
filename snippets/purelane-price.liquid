@@ -1,0 +1,32 @@
+{%- comment -%}
+  Purelane price snippet — renders current + compare-at price and a
+  percentage-off tag using real Shopify money data. No hardcoded prices.
+  Usage: {% render 'purelane-price', product: product, class: 'pl-card-pr' %}
+  Accepts:
+    product      - a Shopify product object (required)
+    class        - wrapper class (optional)
+    show_badge   - boolean, show "% off" pill (default true)
+{%- endcomment -%}
+{%- liquid
+  assign show_badge = show_badge | default: true
+  assign price = product.selected_or_first_available_variant.price | default: product.price
+  assign compare_at = product.selected_or_first_available_variant.compare_at_price | default: product.compare_at_price
+  assign on_sale = false
+  if compare_at > price
+    assign on_sale = true
+    assign pct_off = compare_at | minus: price | times: 100.0 | divided_by: compare_at | round
+  endif
+-%}
+{%- if product != blank -%}
+<div class="{{ class }}">
+  <strong>{{ price | money_without_trailing_zeros }}</strong>
+  {%- if on_sale -%}
+    <s>{{ compare_at | money_without_trailing_zeros }}</s>
+    {%- if show_badge -%}<em>{{ pct_off }}% off</em>{%- endif -%}
+  {%- endif -%}
+</div>
+{%- else -%}
+<div class="{{ class }}">
+  <strong class="pl-price-placeholder">Select a product</strong>
+</div>
+{%- endif -%}

@@ -1,0 +1,90 @@
+{{ 'purelane-base.css' | asset_url | stylesheet_tag }}
+{{ 'purelane-marquee.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign message_blocks = section.blocks | where: 'type', 'message'
+  assign style_class = ''
+  if section.settings.style == 'light'
+    assign style_class = ' pl-ticker--light'
+  endif
+-%}
+
+{%- if message_blocks.size > 0 -%}
+<div
+  class="pl-scope pl-ticker{{ style_class }}"
+  id="ticker-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="header-marquee"
+  aria-hidden="true"
+>
+  <div class="pl-ticker-track" style="--pl-tick-duration:{{ section.settings.speed }}s">
+    {%- comment -%}
+      Rendered twice back-to-back so translateX(-50%) loops seamlessly with
+      no JS. The whole bar is aria-hidden (it repeats marketing copy that
+      isn't essential content, same as the prototype), so the duplicate
+      pass doesn't need its own aria handling — but shopify_attributes is
+      only emitted on the first pass, so Theme Editor block selection
+      targets one unambiguous element per block.
+    {%- endcomment -%}
+    {%- for i in (1..2) -%}
+      {%- for block in message_blocks -%}
+        <span class="pl-tick-item" {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}>
+          {{- block.settings.text -}}
+          {%- if block.settings.highlight != blank %} <b>{{ block.settings.highlight }}</b>{% endif -%}
+        </span>
+      {%- endfor -%}
+    {%- endfor -%}
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Header marquee",
+  "tag": "div",
+  "class": "shopify-section--header-marquee",
+  "settings": [
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll speed (seconds per loop)",
+      "info": "Lower = faster.",
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "dark", "label": "Dark, translucent (over the hero)" },
+        { "value": "light", "label": "Light, solid (over page content)" }
+      ],
+      "default": "dark"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Free shipping" },
+        { "type": "text", "id": "highlight", "label": "Highlighted text (bold, accent colour)", "default": "on every bundle across India" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header marquee",
+      "blocks": [
+        { "type": "message", "settings": { "text": "Free shipping", "highlight": "on every bundle across India" } },
+        { "type": "message", "settings": { "text": "100% plant-based", "highlight": "and non-toxic" } },
+        { "type": "message", "settings": { "text": "Loved by", "highlight": "30,000+ happy homes" } },
+        { "type": "message", "settings": { "text": "Buy 3", "highlight": "at flat \u20b9499" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

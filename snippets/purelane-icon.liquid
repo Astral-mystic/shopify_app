@@ -1,0 +1,25 @@
+{%- comment -%}
+  Purelane icon snippet — renders a small stroke-icon by name so markup
+  doesn't repeat raw <svg> paths in every section/snippet.
+  Usage: {% render 'purelane-icon', name: 'leaf' %}
+  Accepts: name (string), class (optional string, default '')
+{%- endcomment -%}
+{%- liquid
+  assign icon_class = class | default: ''
+-%}
+{%- case name -%}
+  {%- when 'leaf' -%}
+    <svg class="{{ icon_class }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c0-6.5 3.5-11 8-12.5C20 15 16.5 20 12 21Z"/><path d="M12 21C12 14.5 8.5 10 4 8.5 4 15 7.5 20 12 21Z"/></svg>
+  {%- when 'arrow' -%}
+    <svg class="{{ icon_class }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6"/></svg>
+  {%- when 'check' -%}
+    <svg class="{{ icon_class }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>
+  {%- when 'shield' -%}
+    <svg class="{{ icon_class }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4.5 6v6.2c0 4.3 3.1 7.6 7.5 8.8 4.4-1.2 7.5-4.5 7.5-8.8V6L12 3Z"/><path d="m9 12 2.2 2.2L15.4 10"/></svg>
+  {%- when 'noharsh' -%}
+    <svg class="{{ icon_class }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M6.4 17.6 17.6 6.4"/></svg>
+  {%- when 'star' -%}
+    <svg class="{{ icon_class }}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6 15 9l7 .9-5 4.9 1.3 6.9L12 18l-6.3 3.7L7 14.8 2 9.9 9 9Z"/></svg>
+  {%- when 'chevron' -%}
+    <svg class="{{ icon_class }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+{%- endcase -%}

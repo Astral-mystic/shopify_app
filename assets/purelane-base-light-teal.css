@@ -1,0 +1,610 @@
+
+:root{
+  --pl-ink:#17102b;
+  --pl-deep:#241a3d;
+  --pl-brand:#4b3a8f;
+  --pl-brand-lt:#6b55b8;
+
+  /* Light background palette */
+  --pl-paper:#17102b;
+  --pl-paper-2:rgba(23,16,43,.72);
+  --pl-paper-3:rgba(23,16,43,.52);
+
+  --pl-accent:#f0a03c;
+  --pl-accent-2:#c9761d;
+  --pl-surface:#17102b;
+
+  --pl-g-line:rgba(23,16,43,.12);
+  --pl-g-shadow:0 20px 60px rgba(23,16,43,.12);
+  --pl-g-inset:inset 0 1px 0 rgba(255,255,255,.65);
+
+  --pl-r:26px;
+  --pl-r-sm:16px;
+  --pl-maxw:1180px;
+  --pl-sec-y:34px;
+  --pl-ease:cubic-bezier(.2,.7,.2,1);
+
+  /* Main light teal background */
+  --pl-light-teal:#e3f7f2;
+}
+
+@media(max-width:760px){
+  :root{
+    --pl-sec-y:22px;
+  }
+}
+
+
+/* =========================================================================
+   GLOBAL
+   ========================================================================= */
+
+html,
+body{
+  background:var(--pl-light-teal) !important;
+}
+
+.pl-scope *{
+  box-sizing:border-box;
+}
+
+.pl-scope img,
+.pl-scope svg{
+  display:block;
+  max-width:100%;
+}
+
+.pl-scope a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.pl-scope button{
+  font-family:inherit;
+  cursor:pointer;
+  border:none;
+  background:none;
+  color:inherit;
+}
+
+.pl-scope :focus-visible{
+  outline:2px solid var(--pl-accent);
+  outline-offset:3px;
+  border-radius:6px;
+}
+
+
+/* =========================================================================
+   TYPE
+   ========================================================================= */
+
+.pl-scope{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  color:var(--pl-ink);
+}
+
+.pl-d1,
+.pl-d2,
+.pl-d3,
+.pl-d4{
+  font-family:'Outfit',system-ui,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:-.018em;
+  font-weight:800;
+  line-height:.87;
+  color:var(--pl-ink);
+  margin:0;
+}
+
+.pl-d1{
+  font-size:clamp(48px,8.6vw,112px);
+}
+
+.pl-d2{
+  font-size:clamp(30px,4.6vw,54px);
+  line-height:.94;
+}
+
+.pl-d3{
+  font-size:clamp(21px,2.5vw,30px);
+  line-height:1.04;
+  font-weight:700;
+  letter-spacing:-.01em;
+}
+
+.pl-lime{
+  color:var(--pl-accent);
+}
+
+.pl-lede{
+  font-size:clamp(15px,1.35vw,17.5px);
+  color:var(--pl-paper-2);
+  max-width:44ch;
+  margin:0;
+}
+
+.pl-kicker{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--pl-paper-3);
+}
+
+.pl-wrap{
+  max-width:var(--pl-maxw);
+  margin:0 auto;
+  padding:0 18px;
+}
+
+.pl-panel-head{
+  max-width:640px;
+}
+
+.pl-panel-head.pl-center{
+  margin-left:auto;
+  margin-right:auto;
+  text-align:center;
+}
+
+.pl-rule{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin:12px 0 0;
+  max-width:270px;
+}
+
+.pl-panel-head.pl-center .pl-rule{
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.pl-rule i{
+  height:1px;
+  flex:1;
+  background:linear-gradient(
+    90deg,
+    rgba(23,16,43,.30),
+    transparent
+  );
+}
+
+.pl-rule svg{
+  width:16px;
+  height:16px;
+  color:var(--pl-accent);
+  flex:0 0 auto;
+}
+
+
+/* =========================================================
+   PURELANE — LIGHT TEAL SURFACE
+   ========================================================= */
+
+.pl-section {
+  position: relative;
+  padding: var(--pl-sec-y) 0;
+  color: #173b38 !important;
+  background: #e3f7f2 !important;
+  background-image: none !important;
+  isolation: isolate;
+}
+
+/* Remove the old dark vignette completely */
+.pl-section::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* Remove any section overlay */
+.pl-section::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Keep content above everything */
+.pl-section > .pl-wrap {
+  position: relative;
+  z-index: 2;
+}
+
+/* Hero specifically */
+.pl-hero {
+  background: #e3f7f2 !important;
+  background-image: none !important;
+  color: #173b38 !important;
+}
+
+/* Hero children must not create another dark surface */
+.pl-hero-grid,
+.pl-hero-copy,
+.pl-hero-prod,
+.pl-hstage {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* Global Purelane section surface */
+.pl-scope.pl-section {
+  background-color: #e3f7f2 !important;
+  background-image: none !important;
+}
+
+/* =========================================================================
+   GLASS
+   ========================================================================= */
+
+.pl-glass{
+  background:
+    linear-gradient(
+      158deg,
+      rgba(255,255,255,.72),
+      rgba(236,250,247,.60) 58%,
+      rgba(210,244,238,.55)
+    );
+
+  backdrop-filter:blur(24px) saturate(150%);
+  -webkit-backdrop-filter:blur(24px) saturate(150%);
+
+  border:1px solid rgba(23,16,43,.12);
+
+  border-radius:var(--pl-r);
+
+  box-shadow:
+    0 20px 60px rgba(23,16,43,.10),
+    inset 0 1px 0 rgba(255,255,255,.80);
+
+  position:relative;
+  overflow:hidden;
+}
+
+.pl-glass::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+
+  background:
+    linear-gradient(
+      115deg,
+      rgba(255,255,255,.40),
+      transparent 30%,
+      transparent 72%,
+      rgba(240,160,60,.06)
+    );
+}
+
+
+/* Secondary glass */
+.pl-glass-2{
+  background:
+    linear-gradient(
+      158deg,
+      rgba(255,255,255,.65),
+      rgba(236,250,247,.58)
+    );
+
+  backdrop-filter:blur(18px) saturate(135%);
+  -webkit-backdrop-filter:blur(18px) saturate(135%);
+
+  border:1px solid rgba(23,16,43,.10);
+
+  border-radius:var(--pl-r);
+
+  box-shadow:
+    0 18px 48px rgba(23,16,43,.10),
+    inset 0 1px 0 rgba(255,255,255,.75);
+
+  position:relative;
+  overflow:hidden;
+}
+
+@media(max-width:760px){
+
+  .pl-glass{
+    backdrop-filter:blur(16px) saturate(140%);
+    -webkit-backdrop-filter:blur(16px) saturate(140%);
+  }
+
+  .pl-glass-2{
+    backdrop-filter:blur(12px) saturate(130%);
+    -webkit-backdrop-filter:blur(12px) saturate(130%);
+  }
+
+}
+
+
+/* =========================================================================
+   BUTTONS
+   ========================================================================= */
+
+.pl-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  height:46px;
+  padding:0 22px;
+  border-radius:999px;
+
+  font-size:12.5px;
+  font-weight:700;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+
+  transition:.35s var(--pl-ease);
+  white-space:nowrap;
+  cursor:pointer;
+}
+
+.pl-btn svg{
+  width:15px;
+  height:15px;
+  flex:0 0 auto;
+}
+
+
+/* Primary CTA */
+.pl-btn-primary{
+  background:
+    linear-gradient(
+      135deg,
+      var(--pl-accent-2),
+      #5d8d1c
+    );
+
+  color:#08211a;
+
+  box-shadow:
+    0 12px 30px rgba(201,118,29,.28),
+    inset 0 1px 0 rgba(255,255,255,.40);
+}
+
+.pl-btn-primary:hover{
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 18px 40px rgba(201,118,29,.36),
+    inset 0 1px 0 rgba(255,255,255,.50);
+}
+
+
+/* Secondary CTA */
+.pl-btn-ghost{
+  background:rgba(255,255,255,.50);
+
+  border:1px solid rgba(23,16,43,.18);
+
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
+  color:var(--pl-ink);
+}
+
+.pl-btn-ghost:hover{
+  background:rgba(255,255,255,.75);
+  transform:translateY(-2px);
+}
+
+.pl-btn-sm{
+  height:38px;
+  padding:0 18px;
+  font-size:11px;
+  letter-spacing:.14em;
+}
+
+.pl-btn-block{
+  width:100%;
+  justify-content:center;
+}
+
+
+/* =========================================================================
+   REVEAL ON SCROLL
+   ========================================================================= */
+
+.pl-rv{
+  opacity:0;
+  transform:translateY(30px);
+  filter:blur(7px);
+
+  transition:
+    opacity .95s var(--pl-ease),
+    transform .95s var(--pl-ease),
+    filter .95s var(--pl-ease);
+}
+
+.pl-rv.pl-in{
+  opacity:1;
+  transform:none;
+  filter:none;
+}
+
+.pl-rv-d1{
+  transition-delay:.09s;
+}
+
+.pl-rv-d2{
+  transition-delay:.18s;
+}
+
+.pl-rv-d3{
+  transition-delay:.27s;
+}
+
+.pl-rv-d4{
+  transition-delay:.36s;
+}
+
+
+/* =========================================================================
+   ACCESSIBILITY
+   ========================================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  .pl-scope *{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+
+  .pl-rv{
+    opacity:1;
+    transform:none;
+    filter:none;
+  }
+
+}
+
+
+/* =========================================================================
+   VISUALLY HIDDEN
+   ========================================================================= */
+
+.visually-hidden{
+  position:absolute !important;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+
+
+/* =========================================================================
+   HORIZONTAL SCROLL RAIL
+   ========================================================================= */
+
+.pl-rail-scroll{
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+
+.pl-rail-scroll::-webkit-scrollbar{
+  display:none;
+}
+
+.pl-swipecue{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+
+  color:var(--pl-paper-3);
+
+  margin-top:2px;
+}
+
+.pl-swipecue svg{
+  width:14px;
+  height:14px;
+  color:var(--pl-accent);
+}
+
+@media(min-width:860px){
+  .pl-swipecue{
+    display:none;
+  }
+}
+
+
+/* =========================================================================
+   PURELANE — AUTHORITATIVE LIGHT TEAL OVERRIDE
+   Keep this block LAST in the file.
+   ========================================================================= */
+
+:root{
+  --pl-light-teal:#e3f7f2 !important;
+  --pl-scene:#e3f7f2 !important;
+}
+
+/* Shopify page wrappers */
+html,
+body,
+main,
+#MainContent,
+#main-content,
+.shopify-section,
+.shopify-section-group,
+.shopify-section-group-header-group,
+.shopify-section-group-footer-group{
+  background-color:#e3f7f2 !important;
+  background-image:none !important;
+}
+
+/* Every Purelane section */
+.pl-scope,
+.pl-scope.pl-section,
+.pl-section,
+.pl-section[style]{
+  background-color:#e3f7f2 !important;
+  background-image:none !important;
+  color:#173b38 !important;
+}
+
+/* Explicitly neutralize inline scene styles */
+.pl-section[style],
+.pl-section[style*="background"],
+.pl-section[style*="--pl-scene"]{
+  background:#e3f7f2 !important;
+  background-color:#e3f7f2 !important;
+  background-image:none !important;
+}
+
+/* Never allow the old vignette/scene overlay back */
+.pl-section::before,
+.pl-section::after{
+  content:none !important;
+  display:none !important;
+  background:none !important;
+  background-image:none !important;
+  opacity:0 !important;
+}
+
+/* Hero and its stage stay transparent */
+.pl-hero,
+.pl-hero-grid,
+.pl-hero-copy,
+.pl-hero-prod,
+.pl-hstage{
+  background-color:transparent !important;
+  background-image:none !important;
+}
+
+/* Text for the light background */
+.pl-section .pl-d1,
+.pl-section .pl-d2,
+.pl-section .pl-d3,
+.pl-section .pl-d4{
+  color:#17102b !important;
+}
+
+.pl-section .pl-lede{
+  color:rgba(23,16,43,.72) !important;
+}
+
+.pl-section .pl-kicker{
+  color:rgba(23,16,43,.58) !important;
+}
+
+.pl-section .pl-lime{
+  color:var(--pl-accent) !important;
+}
+
+/* Keep content above the page surface */
+.pl-section > .pl-wrap{
+  position:relative;
+  z-index:2;
+}
